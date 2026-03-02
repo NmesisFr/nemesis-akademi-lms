@@ -1,0 +1,94 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Kurs Düzenle</h1>
+  <form method="post" action="/courses/manage/<%= course.id %>/update" class="gridform">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <label>Başlık</label><input name="title" value="<%= course.title %>" required />
+    <label>Kategori</label><input name="category" value="<%= course.category %>" />
+    <label>Seviye</label><input name="level" value="<%= course.level %>" />
+    <label>Açıklama</label><textarea name="description" rows="5"><%= course.description %></textarea>
+    <label>Yayınla</label>
+    <input name="is_published" type="checkbox" <%= course.is_published ? "checked" : "" %> />
+    <div></div><button class="btn">Kaydet</button>
+  </form>
+
+  <div class="row mt">
+    <a class="btn btn-secondary" href="/quiz/manage/<%= course.id %>">Quiz Yönet</a>
+    <a class="btn btn-secondary" href="/courses/<%= course.id %>">Kursu Gör</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Dersler</h2>
+
+  <h3>Ders Ekle</h3>
+  <form method="post" action="/courses/manage/<%= course.id %>/lessons/add" class="gridform">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <label>Başlık</label><input name="title" required />
+    <label>Sıra</label><input name="sort_order" type="number" value="1" />
+    <label>İçerik</label><textarea name="content" rows="4"></textarea>
+    <div></div><button class="btn">Ekle</button>
+  </form>
+
+  <hr/>
+
+  <% if (lessons.length === 0) { %>
+    <p class="muted">Henüz ders yok.</p>
+  <% } else { %>
+    <ul class="list">
+      <% lessons.forEach(l => { %>
+        <li class="row between">
+          <div>
+            <strong><%= l.sort_order %>. <%= l.title %></strong>
+            <div class="muted"><%= l.content.slice(0,120) %><%= l.content.length>120?"...":"" %></div>
+          </div>
+          <div class="row">
+            <a class="btn btn-secondary" href="/courses/manage/lesson/<%= l.id %>/edit">Düzenle</a>
+            <form method="post" action="/courses/manage/lesson/<%= l.id %>/delete" class="inline">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+              <button class="btn danger">Sil</button>
+            </form>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
+
+<div class="card">
+  <h2>PDF Materyaller</h2>
+
+  <form method="post" action="/courses/manage/<%= course.id %>/materials/upload" enctype="multipart/form-data" class="gridform">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <label>PDF Seç</label>
+    <input type="file" name="pdf" accept="application/pdf,.pdf" required />
+    <label></label>
+    <button class="btn">Yükle</button>
+  </form>
+
+  <hr/>
+
+  <% if (materials.length === 0) { %>
+    <p class="muted">Henüz PDF materyal yok.</p>
+  <% } else { %>
+    <ul class="list">
+      <% materials.forEach(m => { %>
+        <li class="row between">
+          <div>
+            <strong><%= m.original_name %></strong>
+            <div class="muted"><%= Math.round(m.size_bytes/1024) %> KB • <%= m.uploaded_at %></div>
+          </div>
+          <div class="row">
+            <a class="btn btn-secondary" href="/courses/<%= course.id %>/materials/<%= m.id %>/download">İndir</a>
+            <form method="post" action="/courses/manage/<%= course.id %>/materials/<%= m.id %>/delete" class="inline">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+              <button class="btn danger">Sil</button>
+            </form>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
+
+<%- include('partials_footer') %>

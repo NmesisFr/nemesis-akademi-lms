@@ -1,0 +1,32 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Kurs Yönetimi</h1>
+
+  <h3>Yeni Kurs Oluştur</h3>
+  <form method="post" action="/courses/manage/create" class="gridform">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <label>Başlık</label><input name="title" required />
+    <label>Kategori</label><input name="category" value="Kişisel Gelişim" />
+    <label>Seviye</label><input name="level" value="Başlangıç" />
+    <label>Açıklama</label><textarea name="description" rows="4"></textarea>
+    <div></div><button class="btn">Oluştur</button>
+  </form>
+
+  <hr/>
+
+  <h3>Kurslar</h3>
+  <% if (courses.length === 0) { %>
+    <p class="muted">Kurs bulunamadı.</p>
+  <% } else { %>
+    <ul class="list">
+      <% courses.forEach(c => { %>
+        <li>
+          <a href="/courses/manage/<%= c.id %>/edit"><%= c.title %></a>
+          <span class="pill"><%= c.is_published ? "Yayında" : "Taslak" %></span>
+          <% if (c.instructor_name) { %><span class="muted">• <%= c.instructor_name %></span><% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
+<%- include('partials_footer') %>

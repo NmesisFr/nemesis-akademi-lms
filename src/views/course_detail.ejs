@@ -1,0 +1,87 @@
+<%- include('partials_header') %>
+
+<div class="card">
+  <h1><%= course.title %></h1>
+  <div class="muted"><%= course.category %> • <%= course.level %> • Eğitmen: <%= course.instructor_name %></div>
+  <p><%= course.description %></p>
+
+  <div class="row">
+    <span class="pill"><%= course.is_published ? "Yayında" : "Taslak" %></span>
+    <span class="pill ok">İlerleme: <%= progressPct %>%</span>
+  </div>
+
+  <% if (!enrollment && course.is_published) { %>
+    <form method="post" action="/courses/<%= course.id %>/enroll" class="mt">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+      <button class="btn">Kursa Katıl</button>
+    </form>
+  <% } %>
+</div>
+
+<div class="card">
+  <h2>Dersler</h2>
+  <% if (lessons.length === 0) { %>
+    <p class="muted">Henüz ders eklenmemiş.</p>
+  <% } else { %>
+    <ol class="list">
+      <% lessons.forEach(l => { %>
+        <li class="lesson">
+          <div>
+            <strong><%= l.title %></strong>
+            <% if (l.completed) { %><span class="pill ok">Tamamlandı</span><% } %>
+            <div class="muted"><%= l.content %></div>
+          </div>
+
+          <% if (enrollment) { %>
+            <form method="post" action="/courses/lesson/<%= l.id %>/complete">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+              <button class="btn btn-secondary">Tamamla</button>
+            </form>
+          <% } %>
+        </li>
+      <% }) %>
+    </ol>
+  <% } %>
+</div>
+
+<% if (canSeeMaterials) { %>
+  <div class="card">
+    <h2>Kurs Materyalleri (PDF)</h2>
+    <% if (materials.length === 0) { %>
+      <p class="muted">Henüz materyal eklenmemiş.</p>
+    <% } else { %>
+      <ul class="list">
+        <% materials.forEach(m => { %>
+          <li class="row between">
+            <div>
+              <strong><%= m.original_name %></strong>
+              <div class="muted"><%= Math.round(m.size_bytes/1024) %> KB • <%= m.uploaded_at %></div>
+            </div>
+            <a class="btn btn-secondary" href="/courses/<%= course.id %>/materials/<%= m.id %>/download">İndir</a>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+<% } %>
+
+<% if (enrollment && quiz) { %>
+  <div class="card">
+    <h2>Quiz</h2>
+    <p class="muted"><%= quiz.title %></p>
+    <a class="btn" href="/quiz/take/<%= course.id %>">Quiz'e Başla</a>
+  </div>
+<% } %>
+
+<% if (enrollment && progressPct === 100) { %>
+  <div class="card">
+    <h2>Belge</h2>
+    <p class="muted">Kursu tamamladın. Belge talebini gönderebilirsin.</p>
+    <form method="post" action="/courses/<%= course.id %>/certificate/request">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+      <button class="btn">Belge Talebi Gönder</button>
+    </form>
+  </div>
+<% } %>
+
+<%- include('partials_footer') %>

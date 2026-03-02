@@ -1,0 +1,23 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1><%= quiz.title %></h1>
+
+  <% if (questions.length === 0) { %>
+    <p class="muted">Quiz sorusu yok.</p>
+  <% } else { %>
+    <form method="post" action="/quiz/submit/<%= courseId %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+      <% questions.forEach((q, idx) => { %>
+        <div class="qbox">
+          <div><strong><%= (idx+1) %>) <%= q.question %></strong></div>
+          <label class="radio"><input type="radio" name="q_<%= q.id %>" value="A" required /> A) <%= q.option_a %></label>
+          <label class="radio"><input type="radio" name="q_<%= q.id %>" value="B" /> B) <%= q.option_b %></label>
+          <label class="radio"><input type="radio" name="q_<%= q.id %>" value="C" /> C) <%= q.option_c %></label>
+          <label class="radio"><input type="radio" name="q_<%= q.id %>" value="D" /> D) <%= q.option_d %></label>
+        </div>
+      <% }) %>
+      <button class="btn">Gönder</button>
+    </form>
+  <% } %>
+</div>
+<%- include('partials_footer') %>

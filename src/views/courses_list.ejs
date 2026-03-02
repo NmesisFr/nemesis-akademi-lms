@@ -1,0 +1,22 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Kurslar</h1>
+  <p class="muted">Kişisel gelişim kurslarını keşfet ve katıl.</p>
+
+  <div class="cards">
+    <% courses.forEach(c => { %>
+      <div class="course">
+        <h3><a href="/courses/<%= c.id %>"><%= c.title %></a></h3>
+        <div class="muted"><%= c.category %> • <%= c.level %> • Eğitmen: <%= c.instructor_name %></div>
+        <p><%= c.description.slice(0, 140) %><%= c.description.length > 140 ? "..." : "" %></p>
+        <div class="row">
+          <span class="pill"><%= c.is_published ? "Yayında" : "Taslak" %></span>
+          <% if (enrolled.includes(c.id)) { %>
+            <span class="pill ok">Kayıtlısın</span>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+<%- include('partials_footer') %>

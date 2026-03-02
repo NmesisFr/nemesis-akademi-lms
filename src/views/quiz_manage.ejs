@@ -1,0 +1,46 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Quiz Yönetimi • <%= course.title %></h1>
+
+  <h3>Soru Ekle</h3>
+  <form method="post" action="/quiz/manage/<%= course.id %>/questions/add" class="gridform">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <label>Soru</label><input name="question" required />
+    <label>A</label><input name="option_a" required />
+    <label>B</label><input name="option_b" required />
+    <label>C</label><input name="option_c" required />
+    <label>D</label><input name="option_d" required />
+    <label>Doğru</label>
+    <select name="correct_option">
+      <option>A</option><option>B</option><option>C</option><option>D</option>
+    </select>
+    <div></div><button class="btn">Ekle</button>
+  </form>
+
+  <hr/>
+
+  <h3>Sorular</h3>
+  <% if (questions.length === 0) { %>
+    <p class="muted">Henüz soru yok.</p>
+  <% } else { %>
+    <ul class="list">
+      <% questions.forEach(q => { %>
+        <li class="row between">
+          <div>
+            <strong><%= q.question %></strong>
+            <div class="muted">Doğru: <%= q.correct_option %></div>
+          </div>
+          <form method="post" action="/quiz/manage/question/<%= q.id %>/delete" class="inline">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+            <button class="btn danger">Sil</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <div class="mt">
+    <a class="btn btn-secondary" href="/courses/manage/<%= course.id %>/edit">Geri</a>
+  </div>
+</div>
+<%- include('partials_footer') %>

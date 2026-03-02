@@ -1,0 +1,13 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Quiz Sonucu</h1>
+  <p><strong><%= quiz.title %></strong></p>
+  <div class="row">
+    <span class="pill ok">Skor: <%= attempt.score %> / <%= attempt.total %></span>
+    <span class="pill">Tarih: <%= attempt.attempted_at %></span>
+  </div>
+  <div class="mt">
+    <a class="btn btn-secondary" href="/courses/<%= quiz.course_id %>">Kursa Dön</a>
+  </div>
+</div>
+<%- include('partials_footer') %>

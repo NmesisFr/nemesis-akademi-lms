@@ -1,0 +1,21 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Admin • Kurslar</h1>
+  <table class="table">
+    <thead>
+      <tr><th>ID</th><th>Başlık</th><th>Eğitmen</th><th>Durum</th><th>Link</th></tr>
+    </thead>
+    <tbody>
+      <% courses.forEach(c => { %>
+        <tr>
+          <td><%= c.id %></td>
+          <td><%= c.title %></td>
+          <td><%= c.instructor_name %></td>
+          <td><span class="pill"><%= c.is_published ? "Yayında" : "Taslak" %></span></td>
+          <td><a href="/courses/manage/<%= c.id %>/edit">Düzenle</a></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('partials_footer') %>

@@ -1,0 +1,17 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Giriş</h1>
+  <% if (error) { %><div class="alert"><%= error %></div><% } %>
+
+  <form method="post" action="/auth/login">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <label>Email</label>
+    <input name="email" type="email" required />
+    <label>Şifre</label>
+    <input name="password" type="password" required />
+    <button class="btn">Giriş Yap</button>
+  </form>
+
+  <p class="muted">Hesabın yoksa: <a href="/auth/register">Kayıt ol</a></p>
+</div>
+<%- include('partials_footer') %>

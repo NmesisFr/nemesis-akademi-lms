@@ -1,0 +1,42 @@
+<%- include('partials_header') %>
+
+<div class="grid">
+  <div class="card">
+    <h2>Merhaba, <%= user.full_name %></h2>
+    <p class="muted">Rol: <strong><%= user.role %></strong></p>
+    <p>Panelden kurslara erişebilir, ilerlemeni takip edebilirsin.</p>
+  </div>
+
+  <div class="card">
+    <h2>Kayıtlı Kursların</h2>
+    <% if (myEnrollments.length === 0) { %>
+      <p class="muted">Henüz bir kursa katılmadın. <a href="/courses">Kurslara göz at</a></p>
+    <% } else { %>
+      <ul class="list">
+        <% myEnrollments.forEach(c => { %>
+          <li><a href="/courses/<%= c.id %>"><%= c.title %></a> <span class="muted">(<%= c.category %>)</span></li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <% if (user.role === 'instructor' || user.role === 'admin') { %>
+    <div class="card">
+      <h2>Benim Kurslarım</h2>
+      <% if (myCourses.length === 0) { %>
+        <p class="muted">Kursun yok. <a href="/courses/manage/mine">Kurs Yönetimi</a></p>
+      <% } else { %>
+        <ul class="list">
+          <% myCourses.forEach(c => { %>
+            <li>
+              <a href="/courses/manage/<%= c.id %>/edit"><%= c.title %></a>
+              <span class="pill"><%= c.is_published ? "Yayında" : "Taslak" %></span>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials_footer') %>

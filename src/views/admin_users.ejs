@@ -1,0 +1,31 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Admin • Kullanıcılar</h1>
+  <table class="table">
+    <thead>
+      <tr><th>ID</th><th>Ad</th><th>Email</th><th>Rol</th><th>İşlem</th></tr>
+    </thead>
+    <tbody>
+      <% users.forEach(u => { %>
+        <tr>
+          <td><%= u.id %></td>
+          <td><%= u.full_name %></td>
+          <td><%= u.email %></td>
+          <td><span class="pill"><%= u.role %></span></td>
+          <td>
+            <form method="post" action="/admin/users/<%= u.id %>/role" class="row">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+              <select name="role">
+                <option value="student" <%= u.role==='student'?'selected':'' %>>student</option>
+                <option value="instructor" <%= u.role==='instructor'?'selected':'' %>>instructor</option>
+                <option value="admin" <%= u.role==='admin'?'selected':'' %>>admin</option>
+              </select>
+              <button class="btn btn-secondary">Kaydet</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('partials_footer') %>

@@ -1,0 +1,17 @@
+<%- include('partials_header') %>
+<div class="card">
+  <h1>Ders Düzenle</h1>
+
+  <form method="post" action="/courses/manage/lesson/<%= lesson.id %>/update" class="gridform">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <label>Başlık</label><input name="title" value="<%= lesson.title %>" required />
+    <label>Sıra</label><input name="sort_order" type="number" value="<%= lesson.sort_order %>" />
+    <label>İçerik</label><textarea name="content" rows="10"><%= lesson.content %></textarea>
+    <div></div><button class="btn">Kaydet</button>
+  </form>
+
+  <div class="mt">
+    <a class="btn btn-secondary" href="/courses/manage/<%= lesson.course_id %>/edit">Geri</a>
+  </div>
+</div>
+<%- include('partials_footer') %>

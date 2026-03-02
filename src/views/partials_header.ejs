@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= appName %></title>
+  <link rel="stylesheet" href="/public/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand"><a href="/dashboard"><%= appName %></a></div>
+      <nav class="nav">
+        <% if (user) { %>
+          <a href="/courses">Kurslar</a>
+          <a href="/dashboard">Panel</a>
+          <% if (user.role === 'instructor' || user.role === 'admin') { %>
+            <a href="/courses/manage/mine">Kurs Yönetimi</a>
+          <% } %>
+          <% if (user.role === 'admin') { %>
+            <a href="/admin/users">Admin</a>
+          <% } %>
+          <form method="post" action="/auth/logout" class="inline">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+            <button class="btn btn-secondary">Çıkış</button>
+          </form>
+        <% } else { %>
+          <a href="/auth/login">Giriş</a>
+          <a href="/auth/register">Kayıt</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
