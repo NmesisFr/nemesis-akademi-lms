@@ -1,0 +1,8 @@
+node_modules/
+*.sqlite
+sessions.sqlite
+lms.sqlite
+uploads/materials/
+uploads/receipts/
+.env
+*.zip
